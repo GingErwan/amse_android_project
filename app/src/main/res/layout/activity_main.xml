@@ -8,73 +8,96 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/img_background"
+                android:layout_width="448dp"
+                android:layout_height="814dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.517"
                 app:srcCompat="@drawable/etoilefond" />
 
             <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="113dp"
-                android:layout_height="115dp"
-                app:srcCompat="@drawable/asteroid1"
-                tools:layout_editor_absoluteX="129dp"
-                tools:layout_editor_absoluteY="40dp" />
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="90dp"
-                android:layout_height="86dp"
-                app:srcCompat="@drawable/asteroid2"
-                tools:layout_editor_absoluteX="269dp"
-                tools:layout_editor_absoluteY="142dp" />
-
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="62dp"
-                android:layout_height="67dp"
-                app:srcCompat="@drawable/asteroid3"
-                tools:layout_editor_absoluteX="38dp"
-                tools:layout_editor_absoluteY="293dp" />
-
-            <ImageView
-                android:id="@+id/imageView11"
-                android:layout_width="128dp"
-                android:layout_height="87dp"
-                app:srcCompat="@drawable/asteroid4"
-                tools:layout_editor_absoluteX="231dp"
-                tools:layout_editor_absoluteY="280dp" />
-
-            <ImageView
-                android:id="@+id/imageView12"
+                android:id="@+id/img_tie"
                 android:layout_width="155dp"
                 android:layout_height="165dp"
-                app:srcCompat="@drawable/tie"
-                tools:layout_editor_absoluteX="119dp"
-                tools:layout_editor_absoluteY="405dp" />
+                android:layout_marginBottom="176dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/tie" />
+
+            <ImageView
+                android:id="@+id/img_asteroid1"
+                android:layout_width="113dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/asteroid1" />
+
+            <ImageView
+                android:id="@+id/img_asteroid2"
+                android:layout_width="90dp"
+                android:layout_height="86dp"
+                android:layout_marginTop="132dp"
+                android:layout_marginEnd="72dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/asteroid2" />
+
+            <ImageView
+                android:id="@+id/img_asteroid3"
+                android:layout_width="62dp"
+                android:layout_height="67dp"
+                android:layout_marginStart="84dp"
+                android:layout_marginBottom="484dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/asteroid3" />
+
+            <ImageView
+                android:id="@+id/img_asteroid4"
+                android:layout_width="128dp"
+                android:layout_height="87dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="396dp"
+                app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/asteroid4" />
 
             <FrameLayout
-                android:layout_width="397dp"
-                android:layout_height="174dp"
-                tools:layout_editor_absoluteX="-4dp"
-                tools:layout_editor_absoluteY="611dp">
+                android:id="@+id/frameLayout"
+                android:layout_width="0dp"
+                android:layout_height="149dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView7"
+                    android:id="@+id/img_pad_center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/pad_center" />
 
                 <ImageView
-                    android:id="@+id/imageView6"
+                    android:id="@+id/img_pad_exterior"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
