@@ -82,19 +82,12 @@
 
             <FrameLayout
                 android:id="@+id/frameLayout"
-                android:layout_width="0dp"
-                android:layout_height="149dp"
+                android:layout_width="409dp"
+                android:layout_height="256dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent">
-
-                <ImageView
-                    android:id="@+id/img_pad_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/pad_center" />
 
                 <ImageView
                     android:id="@+id/img_pad_exterior"
@@ -102,6 +95,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/pad_exterior" />
+
+                <ImageView
+                    android:id="@+id/img_pad_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/pad_center" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
