@@ -19,6 +19,7 @@ import android.hardware.SensorManager;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private boolean joystickIsPressed = false;
+    
 
     float screenWidth;
     float screenHeight;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         xm = event.getX() + v.getX() - radiusJoystickInt;
                         ym = event.getY() + v.getY() - radiusJoystickInt;
 
-                        if (joystickIsPressed == true){
+                        if (joystickIsPressed){
 
                             float displacement = (float) Math.sqrt(Math.pow(xm - originX, 2) + Math.pow(ym - originY, 2));
 
