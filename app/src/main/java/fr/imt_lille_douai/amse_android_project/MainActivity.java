@@ -10,12 +10,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android. os. Bundle;
-import android. app.Activity ;
-import android. view. Menu;
-import android. view. View;
 import android.view.ViewAnimationUtils;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -25,19 +20,19 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-
 import android.animation.Animator;
+
+import java.util.Arrays;
+import java.util.List;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import java.time.Duration;
 import android.util.Log;
 import android.view.animation.RotateAnimation;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.app.Activity;
 import android.view.Menu;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private boolean joystickIsPressed = false;
@@ -82,13 +77,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         screenWidth = size.x;
         screenHeight = size.y;
 
-        diagonalTranslation(img_asteroid1, 6000, "translationX", "translationY", 600);
-        translation(img_asteroid3, 3000, "translationY", 400);
-        ImageView img_asteroid1 = (ImageView)findViewById(R.id.img_asteroid1);
-        ImageView img_asteroid2 = (ImageView)findViewById(R.id.img_asteroid2);
-        ImageView img_asteroid3 = (ImageView)findViewById(R.id.img_asteroid3);
-        ImageView img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
-        List<ImageView> asteroidList = Arrays.asList(img_asteroid1, img_asteroid4, img_asteroid3, img_asteroid4);
         diagonalTranslation(img_asteroid1, 6000, "translationX", "translationY", 700);
         translation(img_asteroid3, 3000, "translationY", 1000);
         ellipse(img_asteroid2, 13000, 359f, 0f, 0f, 1000f, 1000f);
@@ -211,14 +199,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-
     public void allRotations (View Asteroid1, float durationAsteroid1, View Asteroid2, float durationAsteroid2, View Asteroid3, float durationAsteroid3, View Asteroid4, float durationAsteroid4){
         rotation(Asteroid1, 14000);
         rotation(Asteroid2, 6000);
         rotation(Asteroid3, 8000);
         rotation(Asteroid4, 7000);
     }
-
 
     public void rotation( View v, int duration){
         ObjectAnimator animation = ObjectAnimator.ofFloat(v, "rotation", 360);
@@ -247,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         return(rectFirstView.intersect(rectSecondView));
     }
+
     public void animationCollision (ImageView firstView, ImageView secondView){
         ImageView Explosion = (ImageView) findViewById(R.id.img_explosion);
         /*ObjectAnimator animation = ObjectAnimator.ofFloat(Explosion, "alpha", 1f);*/
