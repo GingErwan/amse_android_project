@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView img_asteroid4;
 
     private Handler hMovingTie;
+    private Handler hCollision;
 
     private SensorManager mSensorManager;
     private Sensor accelerometer;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
 
         hMovingTie = new Handler();
+        hCollision = new Handler();
 
         Display screensize = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -72,6 +74,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         ellipse(img_asteroid2, 13000, 359f, 0f, 0f, 1000f, 1000f);
         ellipse(img_asteroid4, 10000, -359f, 50f, 100f, 700f, 700f);
         allRotations(img_asteroid1, 5000, img_asteroid2, 6000, img_asteroid3, 4000, img_asteroid4, 10000);
+
+        Runnable checkCollison = new Runnable() {
+            @Override
+            public void run() {
+                if(!gameLost){
+                    animationCollision(imgTie, img_asteroid1);
+                    animationCollision(imgTie, img_asteroid2);
+                    animationCollision(imgTie, img_asteroid3);
+                    animationCollision(imgTie, img_asteroid4);
+
+                    if(!gameLost){
+                        hCollision.postDelayed(this, 10);
+                    }
+                }
+            }
+        };
+        checkCollison.run();
 
         imgJoystick.setOnTouchListener(new View.OnTouchListener() {
 
@@ -129,11 +148,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 Runnable movingTie = new Runnable() {
                                     @Override
                                     public void run() {
-                                        animationCollision(imgTie, img_asteroid1);
-                                        animationCollision(imgTie, img_asteroid2);
-                                        animationCollision(imgTie, img_asteroid3);
-                                        animationCollision(imgTie, img_asteroid4);
-
                                         varJoyX = (originX - imgJoystick.getX())/1500;
                                         varJoyY = (originY - imgJoystick.getY())/1500;
 
@@ -174,11 +188,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             break;
                     }
 
-
                 return true;
             }
         });
+
     }
+
+
+
 
     public void translation (View v, int duration, String type, float length) {
         v.setY(200f);
@@ -260,12 +277,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         float gammaX = event.values[0], gammaY = event.values[1];
 
-        if(!gameLost){
-            animationCollision(this.imgTie, this.img_asteroid1);
-            animationCollision(this.imgTie, this.img_asteroid2);
-            animationCollision(this.imgTie, this.img_asteroid3);
-            animationCollision(this.imgTie, this.img_asteroid4);
 
+        if(!gameLost){
             float tieX;
             float tieY;
 
