@@ -226,14 +226,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-
-    public void rotation( View v, int duration){
-        ObjectAnimator animation = ObjectAnimator.ofFloat(v, "rotation", 360);
-        animation.setDuration(duration);
-        animation.start();
-        animation.setRepeatCount(Animation.INFINITE);
-    }
-
     public void ellipse (View v, int duration, float SweepAngle, float left, float top, float right, float bottom, float startAngle) {
         Path path = new Path();
         path.arcTo(left, top, right, bottom, startAngle,  SweepAngle, true);
@@ -246,22 +238,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     boolean Collision(ImageView firstView, ImageView secondView){
         int[] firstPosition = new int[2];
         int[] secondPosition = new int[2];
+
+        int imgTieW = firstView.getMeasuredWidth();
+        int imgTieH = firstView.getMeasuredHeight();
+        int imgAstW = secondView.getMeasuredWidth();
+        int imgAstH = secondView.getMeasuredHeight();
+
         firstView.getLocationOnScreen(firstPosition);
         secondView.getLocationOnScreen(secondPosition);
 
-        Rect rectFirstView = new Rect(firstPosition[0]*9/10, firstPosition[1], firstPosition[0] + firstView.getMeasuredWidth(), firstPosition[1] + firstView.getMeasuredHeight()*2/3);
-        Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1], secondPosition[0] + secondView.getMeasuredWidth()*2/3, secondPosition[1] + secondView.getMeasuredHeight()*2/3);
+        Rect rectFirstView = new Rect(firstPosition[0] + imgTieW/10, firstPosition[1] + imgTieH/4, firstPosition[0] + imgTieW - imgTieW/10, firstPosition[1] + imgTieH - imgTieH/4);
+        Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1], secondPosition[0] + imgAstW, secondPosition[1] + imgAstH);
 
         return(rectFirstView.intersect(rectSecondView));
     }
 
     public void animationCollision (ImageView firstView, ImageView secondView){
-        ImageView Explosion = (ImageView) findViewById(R.id.img_explosion);
-        /*ObjectAnimator animation = ObjectAnimator.ofFloat(Explosion, "alpha", 1f);*/
-        int explosionX = Explosion.getWidth()/2;
-        int explosionY = Explosion.getHeight()/2;
         if (Collision(firstView, secondView)){
-            Log.d("Collision", "Coll with " + secondView.toString());
+            ImageView Explosion = (ImageView) findViewById(R.id.img_explosion);
+            int explosionX = Explosion.getWidth()/2;
+            int explosionY = Explosion.getHeight()/2;
             this.gameLost = true;
             Explosion.setX(firstView.getX());
             Explosion.setY(firstView.getY());
