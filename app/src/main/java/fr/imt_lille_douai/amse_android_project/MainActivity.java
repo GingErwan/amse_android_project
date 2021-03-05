@@ -1,45 +1,38 @@
 package fr.imt_lille_douai.amse_android_project;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.animation.ObjectAnimator;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android. os. Bundle;
-import android. app.Activity ;
-import android. view. Menu;
-import android. view. View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
-import android. widget.ImageView;
-import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
 import android.view.Display;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import java.time.Duration;
+import android.util.Log;
+import android.view.animation.RotateAnimation;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.app.Activity;
+import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-
-
-
     private boolean joystickIsPressed = false;
-
 
     float screenWidth;
     float screenHeight;
@@ -47,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView imgJoystick;
     private ImageView imgJoystickExt;
     private ImageView imgTie;
+    private ImageView img_asteroid1;
+    private ImageView img_asteroid2;
+    private ImageView img_asteroid3;
+    private ImageView img_asteroid4;
 
     private Handler hMovingTie;
 
@@ -58,62 +55,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageView img_asteroid1 = (ImageView)findViewById(R.id.img_asteroid1);
-        ImageView img_asteroid2 = (ImageView)findViewById(R.id.img_asteroid2);
-        ImageView img_asteroid3 = (ImageView)findViewById(R.id.img_asteroid3);
-        ImageView img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
-        diagonalTranslation(img_asteroid1, 6000, "translationX", "translationY", 600);
-        translation(img_asteroid3, 3000, "translationY", 400);
-        ellipse(img_asteroid2, 13000, 359f, 0f, 0f, 1000f, 1000f);
-        ellipse(img_asteroid4, 10000, -359f, 50f, 100f, 700f, 700f);
-        allRotations(img_asteroid1, 5000, img_asteroid2, 6000, img_asteroid3, 4000, img_asteroid4, 10000);
-
-    }
-
-
-    public void translation (View v, int duration, String type, float length) {
-        ObjectAnimator animation = ObjectAnimator.ofFloat(v, type, length);
-        animation.setDuration(duration);
-        animation.setRepeatCount(ValueAnimator.INFINITE);
-        animation.setRepeatMode(ValueAnimator.REVERSE);
-        animation.start();
-
-    }
-
-    public void diagonalTranslation (View v, int duration, String type1, String type2, float length) {
-        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(type1, length);
-        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(type2, length);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(v, pvhX, pvhY);
-        animator.setDuration(duration);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setRepeatMode(ValueAnimator.REVERSE);
-        animator.start();
-
-    }
-
-
-    public void allRotations (View Asteroid1, float durationAsteroid1, View Asteroid2, float durationAsteroid2, View Asteroid3, float durationAsteroid3, View Asteroid4, float durationAsteroid4){
-        rotation(Asteroid1, 14000);
-        rotation(Asteroid2, 6000);
-        rotation(Asteroid3, 8000);
-        rotation(Asteroid4, 7000);
-    }
-
-
-    public void rotation( View v, int duration){
-        ObjectAnimator animation = ObjectAnimator.ofFloat(v, "rotation", 360);
-        animation.setDuration(duration);
-        animation.start();
-        animation.setRepeatCount(Animation.INFINITE);
-
-
-        imgTie = (ImageView)findViewById(R.id.img_tie);
-        imgJoystick = (ImageView)findViewById(R.id.img_pad_center);
-        imgJoystickExt = (ImageView)findViewById(R.id.img_pad_exterior);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+
+        imgTie = (ImageView)findViewById(R.id.img_tie);
+        imgJoystick = (ImageView)findViewById(R.id.img_pad_center);
+        imgJoystickExt = (ImageView)findViewById(R.id.img_pad_exterior);
+        img_asteroid1 = (ImageView)findViewById(R.id.img_asteroid1);
+        img_asteroid2 = (ImageView)findViewById(R.id.img_asteroid2);
+        img_asteroid3 = (ImageView)findViewById(R.id.img_asteroid3);
+        img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
+
+        hMovingTie = new Handler();
 
         Display screensize = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -121,7 +76,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         screenWidth = size.x;
         screenHeight = size.y;
 
-        hMovingTie = new Handler();
+        diagonalTranslation(img_asteroid1, 6000, "translationX", "translationY", 600);
+        translation(img_asteroid3, 3000, "translationY", 400);
+        ellipse(img_asteroid2, 13000, 359f, 0f, 0f, 1000f, 1000f);
+        ellipse(img_asteroid4, 10000, -359f, 50f, 100f, 700f, 700f);
+        allRotations(img_asteroid1, 5000, img_asteroid2, 6000, img_asteroid3, 4000, img_asteroid4, 10000);
 
         imgJoystick.setOnTouchListener(new View.OnTouchListener() {
 
@@ -215,7 +174,63 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 return true;
             }
         });
+    }
 
+    public void translation (View v, int duration, String type, float length) {
+        ObjectAnimator animation = ObjectAnimator.ofFloat(v, type, length);
+        animation.setDuration(duration);
+        animation.setRepeatCount(ValueAnimator.INFINITE);
+        animation.setRepeatMode(ValueAnimator.REVERSE);
+        animation.start();
+
+    }
+
+    public void diagonalTranslation (View v, int duration, String type1, String type2, float length) {
+        PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(type1, length);
+        PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(type2, length);
+        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(v, pvhX, pvhY);
+        animator.setDuration(duration);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.start();
+
+    }
+
+
+    public void allRotations (View Asteroid1, float durationAsteroid1, View Asteroid2, float durationAsteroid2, View Asteroid3, float durationAsteroid3, View Asteroid4, float durationAsteroid4){
+        rotation(Asteroid1, 14000);
+        rotation(Asteroid2, 6000);
+        rotation(Asteroid3, 8000);
+        rotation(Asteroid4, 7000);
+    }
+
+
+    public void rotation( View v, int duration){
+        ObjectAnimator animation = ObjectAnimator.ofFloat(v, "rotation", 360);
+        animation.setDuration(duration);
+        animation.start();
+        animation.setRepeatCount(Animation.INFINITE);
+    }
+
+    public void ellipse (View v, int duration, float SweepAngle, float left, float top, float right, float bottom) {
+        Path path = new Path();
+        path.arcTo(left, top, right, bottom, 0f,  SweepAngle, true);
+        ObjectAnimator trajectoireElliptique = ObjectAnimator.ofFloat(v, View.X, View.Y, path);
+        trajectoireElliptique.setDuration(duration);
+        trajectoireElliptique.setRepeatCount(Animation.INFINITE);
+        trajectoireElliptique.start();
+    }
+
+    boolean Collision(ImageView firstView, ImageView secondView){
+        int[] firstPosition = new int[2];
+        int[] secondPosition = new int[2];
+        firstView.getLocationOnScreen(firstPosition);
+        secondView.getLocationOnScreen(secondPosition);
+
+        Rect rectFirstView = new Rect(firstPosition[0], firstPosition[1], firstPosition[0] + firstView.getMeasuredWidth(), firstPosition[1] + firstView.getMeasuredHeight());
+        Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1], secondPosition[0] + secondView.getMeasuredWidth(), secondPosition[1] + secondView.getMeasuredHeight());
+
+        return(rectFirstView.intersect(rectSecondView));
     }
 
     @Override
@@ -241,27 +256,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         imgTie.setX(tieX);
         imgTie.setY(tieY);
-    }
-
-    public void ellipse (View v, int duration, float SweepAngle, float left, float top, float right, float bottom) {
-        Path path = new Path();
-        path.arcTo(left, top, right, bottom, 0f,  SweepAngle, true);
-        ObjectAnimator trajectoireElliptique = ObjectAnimator.ofFloat(v, View.X, View.Y, path);
-        trajectoireElliptique.setDuration(duration);
-        trajectoireElliptique.setRepeatCount(Animation.INFINITE);
-        trajectoireElliptique.start();
-    }
-
-    boolean Collision(ImageView firstView, ImageView secondView){
-        int[] firstPosition = new int[2];
-        int[] secondPosition = new int[2];
-        firstView.getLocationOnScreen(firstPosition);
-        secondView.getLocationOnScreen(secondPosition);
-
-        Rect rectFirstView = new Rect(firstPosition[0], firstPosition[1], firstPosition[0] + firstView.getMeasuredWidth(), firstPosition[1] + firstView.getMeasuredHeight());
-        Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1], secondPosition[0] + secondView.getMeasuredWidth(), secondPosition[1] + secondView.getMeasuredHeight());
-
-        return(rectFirstView.intersect(rectSecondView));
     }
 
 }
