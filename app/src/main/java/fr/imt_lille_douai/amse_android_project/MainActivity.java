@@ -24,14 +24,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.animation.Animator;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
+    private float screenWidth;
+    private float screenHeight;
+
     private boolean joystickIsPressed = false;
     private boolean gameLost = false;
-
-    float screenWidth;
-    float screenHeight;
 
     private ImageView imgJoystick;
     private ImageView imgJoystickExt;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView img_asteroid4;
     private TextView txt_perdu;
     private Button btn_perdu;
+    private Switch sw_gyroOn;
 
     private Handler hMovingTie;
     private Handler hCollision;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
         txt_perdu = (TextView)findViewById(R.id.txt_perdu);
         btn_perdu = (Button)findViewById(R.id.btn_perdu);
+        sw_gyroOn = (Switch)findViewById(R.id.sw_gyroOn);
 
         hMovingTie = new Handler();
         hCollision = new Handler();
@@ -275,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         float gammaX = event.values[0], gammaY = event.values[1];
 
-        if(!gameLost){
+        if(!gameLost && sw_gyroOn.isChecked()){
             float tieX;
             float tieY;
 
