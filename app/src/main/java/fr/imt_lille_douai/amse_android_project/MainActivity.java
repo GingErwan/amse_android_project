@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     float screenWidth;
     float screenHeight;
+
+    private boolean gameLost = false;
+
     private ImageView imgJoystick;
     private ImageView imgJoystickExt;
     private ImageView imgTie;
@@ -103,74 +106,80 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public boolean onTouch(View v, MotionEvent event){
 
-                switch(event.getAction()){
+                    switch(event.getAction()){
 
-                    case MotionEvent.ACTION_DOWN:
-                        radiusJoystickInt = imgJoystick.getHeight()/2;
-                        originX = imgJoystick.getX();
-                        originY = imgJoystick.getY();
+                        case MotionEvent.ACTION_DOWN:
+                            radiusJoystickInt = imgJoystick.getHeight()/2;
+                            originX = imgJoystick.getX();
+                            originY = imgJoystick.getY();
 
-                        radiusJoystickExt = imgJoystickExt.getHeight()/2;
+                            radiusJoystickExt = imgJoystickExt.getHeight()/2;
 
-                        joystickIsPressed = true;
-                        break;
+                            joystickIsPressed = true;
+                            break;
 
-                    case MotionEvent.ACTION_MOVE:
 
-                        //Instantanate coordonate of the inner circle on the screen
-                        xm = event.getX() + v.getX() - radiusJoystickInt;
-                        ym = event.getY() + v.getY() - radiusJoystickInt;
+                        case MotionEvent.ACTION_MOVE:
 
-                        if (joystickIsPressed){
+                            if(!gameLost){
+                                //Instantanate coordonate of the inner circle on the screen
+                                xm = event.getX() + v.getX() - radiusJoystickInt;
+                                ym = event.getY() + v.getY() - radiusJoystickInt;
 
-                            float displacement = (float) Math.sqrt(Math.pow(xm - originX, 2) + Math.pow(ym - originY, 2));
+                                if (joystickIsPressed){
 
-                            if(displacement < radiusJoystickExt){
-                                imgJoystick.setX(xm);
-                                imgJoystick.setY(ym);
-                            } else {
-                                imgJoystick.setX((xm-originX)/displacement*radiusJoystickExt+originX);
-                                imgJoystick.setY((ym-originY)/displacement*radiusJoystickExt+originY);
-                            }
-                        }
+                                    float displacement = (float) Math.sqrt(Math.pow(xm - originX, 2) + Math.pow(ym - originY, 2));
 
-                        Runnable movingTie = new Runnable() {
-                            @Override
-                            public void run() {
-                                varJoyX = (originX - imgJoystick.getX())/1500;
-                                varJoyY = (originY - imgJoystick.getY())/1500;
-
-                                tieX = imgTie.getX() - varJoyX;
-                                tieY = imgTie.getY() - varJoyY;
-
-                                //Set the Tie to the bounds of the screen
-                                tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
-                                tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth -imgTie.getWidth()/2 : tieX;
-
-                                tieY = tieY + imgTie.getHeight()/2 < 0 ? -imgTie.getHeight()/2 : tieY;
-                                tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight -imgTie.getHeight() : tieY;
-
-                                imgTie.setX(tieX);
-                                imgTie.setY(tieY);
-
-                                if (joystickIsPressed) {
-                                    hMovingTie.postDelayed(this, 10);
+                                    if(displacement < radiusJoystickExt){
+                                        imgJoystick.setX(xm);
+                                        imgJoystick.setY(ym);
+                                    } else {
+                                        imgJoystick.setX((xm-originX)/displacement*radiusJoystickExt+originX);
+                                        imgJoystick.setY((ym-originY)/displacement*radiusJoystickExt+originY);
+                                    }
                                 }
+
+                                Runnable movingTie = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        varJoyX = (originX - imgJoystick.getX())/1500;
+                                        varJoyY = (originY - imgJoystick.getY())/1500;
+
+                                        tieX = imgTie.getX() - varJoyX;
+                                        tieY = imgTie.getY() - varJoyY;
+
+                                        //Set the Tie to the bounds of the screen
+                                        tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
+                                        tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth -imgTie.getWidth()/2 : tieX;
+
+                                        tieY = tieY + imgTie.getHeight()/2 < 0 ? -imgTie.getHeight()/2 : tieY;
+                                        tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight -imgTie.getHeight() : tieY;
+
+                                        imgTie.setX(tieX);
+                                        imgTie.setY(tieY);
+
+                                        if (joystickIsPressed) {
+                                            hMovingTie.postDelayed(this, 10);
+                                        }
+                                    }
+                                };
+                                movingTie.run();
+                            }else{
+                                v.setX(originX);
+                                v.setY(originY);
                             }
-                        };
-                        movingTie.run();
+                            break;
 
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            v.setX(originX);
+                            v.setY(originY);
+                            joystickIsPressed = false;
+                            break;
 
-                    case MotionEvent.ACTION_UP:
-                        v.setX(originX);
-                        v.setY(originY);
-                        joystickIsPressed = false;
-                        break;
+                        default:
+                            break;
+                    }
 
-                    default:
-                        break;
-                }
 
                 return true;
             }
@@ -240,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int explosionX = Explosion.getWidth()/2;
         int explosionY = Explosion.getHeight()/2;
         if (Collision(firstView, secondView)){
+            this.gameLost = true;
             Explosion.setX(firstView.getX());
             Explosion.setY(firstView.getY());
             float finalRadius = (float) Math.hypot(explosionX, explosionY);
@@ -256,22 +266,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         float gammaX = event.values[0], gammaY = event.values[1];
 
-        float tieX;
-        float tieY;
+        if(!gameLost){
+            animationCollision(this.imgTie, this.img_asteroid1);
+            animationCollision(this.imgTie, this.img_asteroid2);
+            animationCollision(this.imgTie, this.img_asteroid3);
+            animationCollision(this.imgTie, this.img_asteroid4);
 
-        tieX = imgTie.getX()-gammaX*5;
-        tieY = imgTie.getY()+gammaY*5;
+            float tieX;
+            float tieY;
 
-        //Set the Tie to the bounds of the screen
-        tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
-        tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth -imgTie.getWidth()/2 : tieX;
+            tieX = imgTie.getX()-gammaX*5;
+            tieY = imgTie.getY()+gammaY*5;
 
-        tieY = tieY + imgTie.getHeight()/2 < 0 ? -imgTie.getHeight()/2 : tieY;
-        tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight -imgTie.getHeight() : tieY;
+            //Set the Tie to the bounds of the screen
+            tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
+            tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth -imgTie.getWidth()/2 : tieX;
+
+            tieY = tieY + imgTie.getHeight()/2 < 0 ? -imgTie.getHeight()/2 : tieY;
+            tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight -imgTie.getHeight() : tieY;
 
 
-        imgTie.setX(tieX);
-        imgTie.setY(tieY);
+            imgTie.setX(tieX);
+            imgTie.setY(tieY);
+        }
+
     }
 
 }

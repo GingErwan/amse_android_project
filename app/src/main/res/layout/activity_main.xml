@@ -81,6 +81,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/asteroid4" />
 
+            <ImageView
+                android:id="@+id/img_explosion"
+                android:layout_width="128dp"
+                android:layout_height="140dp"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/explosion"
+                tools:layout_editor_absoluteX="21dp"
+                tools:layout_editor_absoluteY="16dp" />
+
             <FrameLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="409dp"
@@ -99,20 +108,11 @@
 
                 <ImageView
                     android:id="@+id/img_pad_center"
-                    android:layout_width="wrap_content"
+                    android:layout_width="92dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/pad_center" />
             </FrameLayout>
-
-            <ImageView
-                android:id="@+id/img_explosion"
-                android:layout_width="128dp"
-                android:layout_height="140dp"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/explosion"
-                tools:layout_editor_absoluteX="21dp"
-                tools:layout_editor_absoluteY="16dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
