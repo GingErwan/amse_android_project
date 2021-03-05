@@ -10,6 +10,12 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android. os. Bundle;
+import android. app.Activity ;
+import android. view. Menu;
+import android. view. View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -29,14 +35,15 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.app.Activity;
 import android.view.Menu;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
-
     private boolean joystickIsPressed = false;
 
     float screenWidth;
     float screenHeight;
-
     private ImageView imgJoystick;
     private ImageView imgJoystickExt;
     private ImageView imgTie;
@@ -49,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private SensorManager mSensorManager;
     private Sensor accelerometer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         diagonalTranslation(img_asteroid1, 6000, "translationX", "translationY", 600);
         translation(img_asteroid3, 3000, "translationY", 400);
+        ImageView img_asteroid1 = (ImageView)findViewById(R.id.img_asteroid1);
+        ImageView img_asteroid2 = (ImageView)findViewById(R.id.img_asteroid2);
+        ImageView img_asteroid3 = (ImageView)findViewById(R.id.img_asteroid3);
+        ImageView img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
+        List<ImageView> asteroidList = Arrays.asList(img_asteroid1, img_asteroid4, img_asteroid3, img_asteroid4);
+        diagonalTranslation(img_asteroid1, 6000, "translationX", "translationY", 700);
+        translation(img_asteroid3, 3000, "translationY", 1000);
         ellipse(img_asteroid2, 13000, 359f, 0f, 0f, 1000f, 1000f);
         ellipse(img_asteroid4, 10000, -359f, 50f, 100f, 700f, 700f);
         allRotations(img_asteroid1, 5000, img_asteroid2, 6000, img_asteroid3, 4000, img_asteroid4, 10000);
@@ -177,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void translation (View v, int duration, String type, float length) {
+        v.setY(200f);
         ObjectAnimator animation = ObjectAnimator.ofFloat(v, type, length);
         animation.setDuration(duration);
         animation.setRepeatCount(ValueAnimator.INFINITE);
@@ -186,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void diagonalTranslation (View v, int duration, String type1, String type2, float length) {
+        v.setY(300f);
         PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat(type1, length);
         PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat(type2, length);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(v, pvhX, pvhY);
@@ -231,6 +246,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Rect rectSecondView = new Rect(secondPosition[0], secondPosition[1], secondPosition[0] + secondView.getMeasuredWidth(), secondPosition[1] + secondView.getMeasuredHeight());
 
         return(rectFirstView.intersect(rectSecondView));
+    }
+    public void animationCollision (ImageView firstView, ImageView secondView){
+        ImageView Explosion = (ImageView) findViewById(R.id.img_explosion);
+        /*ObjectAnimator animation = ObjectAnimator.ofFloat(Explosion, "alpha", 1f);*/
+        int explosionX = Explosion.getWidth()/2;
+        int explosionY = Explosion.getHeight()/2;
+        if (Collision(firstView, secondView)){
+            Explosion.setX(firstView.getX());
+            Explosion.setY(firstView.getY());
+            float finalRadius = (float) Math.hypot(explosionX, explosionY);
+            Animator animation = ViewAnimationUtils.createCircularReveal(Explosion, explosionX, explosionY, 0f, finalRadius);
+            Explosion.setVisibility(View.VISIBLE);
+            animation.start();
+        }
     }
 
     @Override
