@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
@@ -204,9 +205,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-
-
-
     public void translation (View v, int duration, String type, float length) {
         v.setY(200f);
         ObjectAnimator animation = ObjectAnimator.ofFloat(v, type, length);
@@ -270,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int explosionX = Explosion.getWidth()/2;
         int explosionY = Explosion.getHeight()/2;
         if (Collision(firstView, secondView)){
+            Log.d("Collision", "Coll with " + secondView.toString());
             this.gameLost = true;
             Explosion.setX(firstView.getX());
             Explosion.setY(firstView.getY());
@@ -286,7 +285,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         float gammaX = event.values[0], gammaY = event.values[1];
-
 
         if(!gameLost){
             float tieX;
