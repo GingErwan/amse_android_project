@@ -2,7 +2,7 @@ package fr.imt_lille_douai.amse_android_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
+import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,20 +11,27 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private boolean joystickIsPressed = false;
+
+    float screenWidth;
+    float screenHeight;
 
     private ImageView imgJoystick;
     private ImageView imgJoystickExt;
     private ImageView imgTie;
 
-    Handler hMovingTie;
+    private Handler hMovingTie;
 
-    float screenWidth;
-    float screenHeight;
+    private SensorManager mSensorManager;
+    private Sensor accelerometer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
         imgTie = (ImageView)findViewById(R.id.img_tie);
         imgJoystick = (ImageView)findViewById(R.id.img_pad_center);
         imgJoystickExt = (ImageView)findViewById(R.id.img_pad_exterior);
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
 
         Display screensize = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -54,8 +65,9 @@ public class MainActivity extends AppCompatActivity {
             float xm;
             float ym;
 
-            float varTieX;
-            float varTieY;
+            float varJoyX;
+            float varJoyY;
+
             float tieX;
             float tieY;
 
@@ -91,17 +103,16 @@ public class MainActivity extends AppCompatActivity {
                                 imgJoystick.setX((xm-originX)/displacement*radiusJoystickExt+originX);
                                 imgJoystick.setY((ym-originY)/displacement*radiusJoystickExt+originY);
                             }
-
-                            varTieX = (originX - imgJoystick.getX())/1500;
-                            varTieY = (originY - imgJoystick.getY())/1500;
-
                         }
 
                         Runnable movingTie = new Runnable() {
                             @Override
                             public void run() {
-                                tieX = imgTie.getX() - varTieX;
-                                tieY = imgTie.getY() - varTieY;
+                                varJoyX = (originX - imgJoystick.getX())/1500;
+                                varJoyY = (originY - imgJoystick.getY())/1500;
+
+                                tieX = imgTie.getX() - varJoyX;
+                                tieY = imgTie.getY() - varJoyY;
 
                                 //Set the Tie to the bounds of the screen
                                 tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
@@ -136,9 +147,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float gammaX = event.values[0], gammaY = event.values[1];
+
+        float tieX;
+        float tieY;
+
+        tieX = imgTie.getX()-gammaX*5;
+        tieY = imgTie.getY()+gammaY*5;
+
+        //Set the Tie to the bounds of the screen
+        tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
+        tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth -imgTie.getWidth()/2 : tieX;
+
+        tieY = tieY + imgTie.getHeight()/2 < 0 ? -imgTie.getHeight()/2 : tieY;
+        tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight -imgTie.getHeight() : tieY;
+
+
+        imgTie.setX(tieX);
+        imgTie.setY(tieY);
+    }
 }
