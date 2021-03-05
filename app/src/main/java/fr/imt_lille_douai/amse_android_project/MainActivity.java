@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         translation(img_asteroid3, 3000, "translationY", 1000);
         ellipse(img_asteroid2, 13000, 359f, 0f, 0f, 1000f, 1000f);
         ellipse(img_asteroid4, 10000, -359f, 50f, 100f, 700f, 700f);
-        allRotations(img_asteroid1, 5000, img_asteroid2, 6000, img_asteroid3, 4000, img_asteroid4, 10000);
 
         Runnable checkCollison = new Runnable() {
             @Override
@@ -212,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         animation.setRepeatCount(ValueAnimator.INFINITE);
         animation.setRepeatMode(ValueAnimator.REVERSE);
         animation.start();
-
     }
 
     public void diagonalTranslation (View v, int duration, String type1, String type2, float length) {
@@ -224,21 +222,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.start();
-
-    }
-
-    public void allRotations (View Asteroid1, float durationAsteroid1, View Asteroid2, float durationAsteroid2, View Asteroid3, float durationAsteroid3, View Asteroid4, float durationAsteroid4){
-        rotation(Asteroid1, 14000);
-        rotation(Asteroid2, 6000);
-        rotation(Asteroid3, 8000);
-        rotation(Asteroid4, 7000);
-    }
-
-    public void rotation( View v, int duration){
-        ObjectAnimator animation = ObjectAnimator.ofFloat(v, "rotation", 360);
-        animation.setDuration(duration);
-        animation.start();
-        animation.setRepeatCount(Animation.INFINITE);
     }
 
     public void ellipse (View v, int duration, float SweepAngle, float left, float top, float right, float bottom) {
@@ -263,12 +246,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void animationCollision (ImageView firstView, ImageView secondView){
-        ImageView Explosion = (ImageView) findViewById(R.id.img_explosion);
-        /*ObjectAnimator animation = ObjectAnimator.ofFloat(Explosion, "alpha", 1f);*/
-        int explosionX = Explosion.getWidth()/2;
-        int explosionY = Explosion.getHeight()/2;
         if (Collision(firstView, secondView)){
-            Log.d("Collision", "Coll with " + secondView.toString());
+            ImageView Explosion = (ImageView) findViewById(R.id.img_explosion);
+            int explosionX = Explosion.getWidth()/2;
+            int explosionY = Explosion.getHeight()/2;
+
             this.gameLost = true;
             Explosion.setX(firstView.getX());
             Explosion.setY(firstView.getY());
