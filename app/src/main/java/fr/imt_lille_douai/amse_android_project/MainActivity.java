@@ -22,25 +22,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.animation.Animator;
 
-import java.util.Arrays;
-import java.util.List;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import java.time.Duration;
-import android.util.Log;
-import android.view.animation.RotateAnimation;
-import android.app.Activity;
-import android.view.Menu;
-import java.util.LinkedList;
-
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private boolean joystickIsPressed = false;
+    private boolean gameLost = false;
 
     float screenWidth;
     float screenHeight;
-
-    private boolean gameLost = false;
 
     private ImageView imgJoystick;
     private ImageView imgJoystickExt;
@@ -109,11 +96,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     switch(event.getAction()){
 
                         case MotionEvent.ACTION_DOWN:
-                            radiusJoystickInt = imgJoystick.getHeight()/2;
                             originX = imgJoystick.getX();
                             originY = imgJoystick.getY();
 
                             radiusJoystickExt = imgJoystickExt.getHeight()/2;
+                            radiusJoystickInt = imgJoystick.getHeight()/2;
 
                             joystickIsPressed = true;
                             break;
@@ -142,6 +129,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 Runnable movingTie = new Runnable() {
                                     @Override
                                     public void run() {
+                                        animationCollision(imgTie, img_asteroid1);
+                                        animationCollision(imgTie, img_asteroid2);
+                                        animationCollision(imgTie, img_asteroid3);
+                                        animationCollision(imgTie, img_asteroid4);
+
                                         varJoyX = (originX - imgJoystick.getX())/1500;
                                         varJoyY = (originY - imgJoystick.getY())/1500;
 
@@ -149,11 +141,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                         tieY = imgTie.getY() - varJoyY;
 
                                         //Set the Tie to the bounds of the screen
-                                        tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2: tieX;
-                                        tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth -imgTie.getWidth()/2 : tieX;
+                                        tieX = tieX + imgTie.getWidth()/2 < 0 ? -imgTie.getWidth()/2 : tieX;
+                                        tieX = tieX + imgTie.getWidth()/2 > screenWidth ? screenWidth - imgTie.getWidth()/2 : tieX;
 
                                         tieY = tieY + imgTie.getHeight()/2 < 0 ? -imgTie.getHeight()/2 : tieY;
-                                        tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight -imgTie.getHeight() : tieY;
+                                        tieY = tieY + imgTie.getHeight() > screenHeight ? screenHeight - imgTie.getHeight() : tieY;
 
                                         imgTie.setX(tieX);
                                         imgTie.setY(tieY);
@@ -163,7 +155,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                         }
                                     }
                                 };
+
                                 movingTie.run();
+
                             }else{
                                 v.setX(originX);
                                 v.setY(originY);
