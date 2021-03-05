@@ -90,6 +90,36 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/explosion" />
 
+            <TextView
+                android:id="@+id/txt_perdu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="250dp"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="Perdu!"
+                android:textAlignment="center"
+                android:textColor="#B1B1B1"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/img_tie"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_perdu"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="resetGame"
+                android:text="Reset"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_perdu" />
+
             <FrameLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="409dp"

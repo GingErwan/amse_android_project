@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Point;
@@ -14,6 +15,7 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -21,6 +23,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.animation.Animator;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private boolean joystickIsPressed = false;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private ImageView img_asteroid2;
     private ImageView img_asteroid3;
     private ImageView img_asteroid4;
+    private TextView txt_perdu;
+    private Button btn_perdu;
 
     private Handler hMovingTie;
     private Handler hCollision;
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         img_asteroid2 = (ImageView)findViewById(R.id.img_asteroid2);
         img_asteroid3 = (ImageView)findViewById(R.id.img_asteroid3);
         img_asteroid4 = (ImageView)findViewById(R.id.img_asteroid4);
+        txt_perdu = (TextView)findViewById(R.id.txt_perdu);
+        btn_perdu = (Button)findViewById(R.id.btn_perdu);
 
         hMovingTie = new Handler();
         hCollision = new Handler();
@@ -86,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     if(!gameLost){
                         hCollision.postDelayed(this, 10);
+                    }else{
+                        txt_perdu.setVisibility(View.VISIBLE);
+                        btn_perdu.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -299,4 +309,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    public void resetGame(View view) {
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 }
